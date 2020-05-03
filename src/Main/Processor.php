@@ -2,6 +2,7 @@
 
 namespace ServiceSchema\Main;
 
+use Psr\Container\ContainerInterface;
 use ServiceSchema\Config\EventRegister;
 use ServiceSchema\Config\ServiceRegister;
 use ServiceSchema\Event\Message;
@@ -41,11 +42,15 @@ class Processor implements ProcessorInterface
      * @param string|null $schemaDir
      * @throws \ServiceSchema\Json\Exception\JsonException
      */
-    public function __construct(array $eventConfigs = null, array $serviceConfigs = null, string $schemaDir = null)
-    {
+    public function __construct(
+        array $eventConfigs = null,
+        array $serviceConfigs = null,
+        string $schemaDir = null,
+        ContainerInterface $container = null
+    ) {
         $this->eventRegister = new EventRegister($eventConfigs);
         $this->serviceRegister = new ServiceRegister($serviceConfigs);
-        $this->serviceFactory = new ServiceFactory();
+        $this->serviceFactory = new ServiceFactory($container);
         $this->messageFactory = new MessageFactory();
         $this->serviceValidator = new ServiceValidator(null, $schemaDir);
         $this->loadConfigs();
