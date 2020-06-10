@@ -6,6 +6,7 @@ use Prophecy\Exception\Doubler\ClassNotFoundException;
 use Psr\Container\ContainerInterface;
 use Psr\Container\NotFoundExceptionInterface;
 use Psr\Log\LoggerInterface;
+use Psr\Log\NullLogger;
 use ServiceSchema\Service\Exception\ServiceException;
 
 class ServiceFactory
@@ -17,10 +18,10 @@ class ServiceFactory
     /** @var LoggerInterface */
     protected $logger;
 
-    public function __construct(LoggerInterface $logger, ContainerInterface $container = null)
+    public function __construct(ContainerInterface $container = null, LoggerInterface $logger = null)
     {
-        $this->logger = $logger;
         $this->container = $container;
+        $this->logger = $logger ?? new NullLogger();
     }
     /**
      * @param string|null $serviceClass
