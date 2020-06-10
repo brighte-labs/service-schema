@@ -5,6 +5,7 @@ namespace ServiceSchema\Service;
 use Prophecy\Exception\Doubler\ClassNotFoundException;
 use Psr\Container\ContainerInterface;
 use Psr\Container\NotFoundExceptionInterface;
+use Psr\Log\LoggerInterface;
 use ServiceSchema\Service\Exception\ServiceException;
 
 class ServiceFactory
@@ -13,8 +14,12 @@ class ServiceFactory
     /** @var ContainerInterface $container */
     protected $container;
 
-    public function __construct(ContainerInterface $container = null)
+    /** @var LoggerInterface */
+    protected $logger;
+
+    public function __construct(LoggerInterface $logger, ContainerInterface $container = null)
     {
+        $this->logger = $logger;
         $this->container = $container;
     }
     /**
@@ -28,7 +33,7 @@ class ServiceFactory
         try {
             $service = $this->container 
             ? $this->getService($serviceClass)
-            : (class_exists($serviceClass) ? new $serviceClass() : null);
+            : (class_exists($serviceClass) ? new $serviceClass($this->logger) : null);
             if ($service === null)
                 throw new ClassNotFoundException("not found", $service);
         } catch (\Exception $exception) {
