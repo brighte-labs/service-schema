@@ -41,11 +41,13 @@ class ServiceFactory
             ? $this->getService($serviceClass)
             : (class_exists($serviceClass) ? new $serviceClass($this->logger) : null);
             if ($service === null)
-                throw new ClassNotFoundException("not found", $service);
+                throw new ClassNotFoundException("not found", $serviceClass);
         } catch (\Exception $exception) {
-            $this->logger->error(__METHOD__ . ': ' . ServiceException::INVALID_SERVICE_CLASS, ['serviceName' => $serviceClass]);
-            throw new ServiceException(ServiceException::INVALID_SERVICE_CLASS);
+            $this->logger->error(__METHOD__ . ': ' . ServiceException::INVALID_SERVICE_CLASS, ['serviceName' => $serviceClass, 'exception' => $exception->getMessage()]);
+
+            return false;
         }
+
         $this->logger->debug(__METHOD__ . 'Service Created', ['serviceName' => $serviceClass]);
         if ($service instanceof ServiceInterface) {
             $service->setName($serviceClass);
@@ -62,7 +64,7 @@ class ServiceFactory
         try {
             return $this->container->get($serviceClass);
         } catch (NotFoundExceptionInterface $e) {
-            return new $serviceClass($this->container);
+            return new $serviceClass($this->logger);
         }
     }
 
