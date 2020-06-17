@@ -43,9 +43,10 @@ class ServiceFactory
             if ($service === null)
                 throw new ClassNotFoundException("not found", $service);
         } catch (\Exception $exception) {
+            $this->logger->error(__METHOD__ . ': ' . ServiceException::INVALID_SERVICE_CLASS, ['serviceName' => $serviceClass]);
             throw new ServiceException(ServiceException::INVALID_SERVICE_CLASS);
         }
-        $this->logger->debug(__METHOD__ . 'Service Created', ['']);
+        $this->logger->debug(__METHOD__ . 'Service Created', ['serviceName' => $serviceClass]);
         if ($service instanceof ServiceInterface) {
             $service->setName($serviceClass);
             $service->setJsonSchema($schema);
