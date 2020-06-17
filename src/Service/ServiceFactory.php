@@ -31,16 +31,21 @@ class ServiceFactory
      */
     public function createService(string $serviceClass = null, string $schema = null)
     {
+        $this->logger->debug(__METHOD__ . ': Start creating service class', [
+            'serviceClass' => $serviceClass,
+            'schema' => $schema
+        ]);
+
         try {
-            $service = $this->container 
+            $service = $this->container
             ? $this->getService($serviceClass)
             : (class_exists($serviceClass) ? new $serviceClass($this->logger) : null);
             if ($service === null)
                 throw new ClassNotFoundException("not found", $service);
         } catch (\Exception $exception) {
-            throw new ServiceException(ServiceException::INVALID_SERVICE_CLASS . $serviceClass);
+            throw new ServiceException(ServiceException::INVALID_SERVICE_CLASS);
         }
-
+        $this->logger->debug(__METHOD__ . 'Service Created', ['']);
         if ($service instanceof ServiceInterface) {
             $service->setName($serviceClass);
             $service->setJsonSchema($schema);
