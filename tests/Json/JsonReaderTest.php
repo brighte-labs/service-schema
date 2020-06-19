@@ -52,6 +52,12 @@ class JsonReaderTest extends TestCase
         $this->assertTrue(is_string($json));
     }
 
+    public function testReadInvalidFile()
+    {
+        $this->expectException(JsonException::class);
+        JsonReader::read('invalid-file');
+    }
+
     /**
      * @covers \ServiceSchema\Json\JsonReader::read
      * @covers \ServiceSchema\Json\JsonReader::decode
@@ -105,5 +111,17 @@ class JsonReaderTest extends TestCase
         JsonReader::save($file, $json);
         $contents = file_get_contents($file);
         $this->assertSame('{"name":"Ken"}', $contents);
+    }
+
+    public function testSaveEmptyFile()
+    {
+        $this->expectException(JsonException::class);
+        JsonReader::save();
+    }
+
+    public function testSaveEmptyContent()
+    {
+        $this->expectException(JsonException::class);
+        JsonReader::save('file-name');
     }
 }

@@ -40,7 +40,7 @@ class ServiceValidator
             throw new ServiceException(ServiceException::MISSING_JSON_STRING);
         }
 
-        if (empty($service->getJsonSchema())) {
+        if (empty($service) || empty($service->getJsonSchema())) {
             throw new ServiceException(ServiceException::MISSING_SERVICE_SCHEMA);
         }
 

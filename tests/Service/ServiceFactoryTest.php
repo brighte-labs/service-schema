@@ -84,5 +84,6 @@ class ServiceFactoryTest extends TestCase
         $this->assertSame($service, $newService);
         $this->assertTrue($newService instanceof ServiceInterface);
         $this->assertEquals($this->testDir . "/jsons/schemas/CreateContact.json", $newService->getJsonSchema());
+        $this->assertEquals($serviceClass, $newService->getName());
     }
 }
