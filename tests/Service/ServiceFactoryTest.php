@@ -2,9 +2,12 @@
 
 namespace ServiceSchema\Tests\Service;
 
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
 use Psr\Container\NotFoundExceptionInterface;
+use Psr\Log\LoggerInterface;
+use Psr\Log\NullLogger;
 use ServiceSchema\Service\Exception\ServiceException;
 use ServiceSchema\Service\ServiceFactory;
 use ServiceSchema\Service\ServiceInterface;
@@ -15,6 +18,8 @@ class ServiceFactoryTest extends TestCase
     protected $testDir;
     /** @var ServiceFactory */
     protected $serviceFactory;
+    /** @var MockObject */
+    protected $logger;
 
     public function setUp()
     {
@@ -46,15 +51,15 @@ class ServiceFactoryTest extends TestCase
 
     public function testCreateServiceNotExists()
     {
-        $this->expectException(ServiceException::class);
         $schema = $this->testDir . "/jsons/schemas/CreateContact.json";
         $service = $this->serviceFactory->createService("frog", $schema);
+        $this->assertFalse($service);
     }
 
     public function testCreateNonStandardService()
     {
         $schema = $this->testDir . "/jsons/schemas/CreateContact.json";
-        $service = $this->serviceFactory->createService("\Exception", $schema);
+        $service = $this->serviceFactory->createService("TestClass", $schema);
         $this->assertFalse($service instanceof ServiceInterface);
         $this->assertFalse($service);
     }
@@ -77,7 +82,7 @@ class ServiceFactoryTest extends TestCase
         $serviceClass = CreateContact::class;
         $schema = $this->testDir . "/jsons/schemas/CreateContact.json";
         $container = $this->createMock(ContainerInterface::class);
-        $service = new CreateContact();
+        $service = new CreateContact(new NullLogger());
         $container->expects(static::once())->method('get')->with($serviceClass)->willReturn($service);
         $this->serviceFactory = new ServiceFactory($container);
         $newService = $this->serviceFactory->createService($serviceClass, $schema);

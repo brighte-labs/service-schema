@@ -4,6 +4,8 @@
 namespace ServiceSchema\Service;
 
 
+use Psr\Log\LoggerInterface;
+
 class Service
 {
     /** @var string */
