@@ -39,7 +39,7 @@ class ServiceFactory
         try {
             $service = $this->container
             ? $this->getService($serviceClass)
-            : (class_exists($serviceClass) ? new $serviceClass($this->logger) : null);
+            : (class_exists($serviceClass) ? new $serviceClass() : null);
             if ($service === null)
                 throw new ClassNotFoundException("not found", $serviceClass);
         } catch (\Exception $exception) {
@@ -64,7 +64,7 @@ class ServiceFactory
         try {
             return $this->container->get($serviceClass);
         } catch (NotFoundExceptionInterface $e) {
-            return new $serviceClass($this->logger);
+            return new $serviceClass();
         }
     }
 

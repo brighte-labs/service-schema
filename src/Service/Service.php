@@ -12,13 +12,6 @@ class Service
     protected $name;
     /** @var string */
     protected $jsonSchema;
-    /** @var LoggerInterface */
-    protected $logger;
-
-    public function __construct(LoggerInterface $logger)
-    {
-        $this->logger = $logger;
-    }
 
     /**
      * @return string
