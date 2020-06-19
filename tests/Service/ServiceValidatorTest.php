@@ -3,6 +3,7 @@
 namespace ServiceSchema\Tests\Service;
 
 use PHPUnit\Framework\TestCase;
+use Psr\Log\NullLogger;
 use ServiceSchema\Json\JsonReader;
 use ServiceSchema\Service\ServiceValidator;
 use ServiceSchema\Tests\Service\Samples\CreateContact;
@@ -33,7 +34,7 @@ class ServiceValidatorTest extends TestCase
     {
         $file = $this->testDir . "/jsons/messages/Users.afterSaveCommit.Create.json";
         $jsonObject = JsonReader::decode(JsonReader::read($file));
-        $service = new CreateContact();
+        $service = new CreateContact(new NullLogger());
         $service->setJsonSchema($this->testDir . "/jsons/schemas/CreateContact.json");
         $validator = $this->serviceValidator->validate($jsonObject, $service);
         $this->assertTrue($validator->isValid());
