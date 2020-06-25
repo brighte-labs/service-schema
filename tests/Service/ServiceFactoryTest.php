@@ -26,7 +26,6 @@ class ServiceFactoryTest extends TestCase
         parent::setUp();
         $this->testDir = dirname(dirname(__FILE__));
         $this->serviceFactory = new ServiceFactory();
-
     }
 
     public function testContainerSettersAndGetters()
@@ -70,7 +69,8 @@ class ServiceFactoryTest extends TestCase
         $schema = $this->testDir . "/jsons/schemas/CreateContact.json";
         $container = $this->createMock(ContainerInterface::class);
         $this->serviceFactory = new ServiceFactory($container);
-        $exception = new class extends \Exception implements NotFoundExceptionInterface{};
+        $exception = new class extends \Exception implements NotFoundExceptionInterface{
+        };
         $container->expects(static::once())->method('get')->with($serviceClass)->willThrowException($exception);
         $newService = $this->serviceFactory->createService($serviceClass, $schema);
         $this->assertTrue($newService instanceof ServiceInterface);

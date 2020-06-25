@@ -14,7 +14,7 @@ class MessageValidatorTest extends TestCase
     public function testValidate()
     {
         $json = JsonReader::read(__DIR__ . '/../jsons/messages/Users.afterSaveCommit.Create.json');
-        $message = (new MessageFactory)->createMessage($json);
+        $message = (new MessageFactory())->createMessage($json);
         $schema = __DIR__ . '/../jsons/schemas/CreateContact.json';
         $this->assertTrue(MessageValidator::validate($message, $schema));
     }
@@ -22,7 +22,7 @@ class MessageValidatorTest extends TestCase
     public function testValidateInvalid()
     {
         $json = JsonReader::read(__DIR__ . '/../jsons/messages/Users.afterSaveCommit.Create.Failed.json');
-        $message = (new MessageFactory)->createMessage($json);
+        $message = (new MessageFactory())->createMessage($json);
         $schema = __DIR__ . '/../jsons/schemas/CreateContact.json';
         $this->expectException(MessageValidatorException::class);
         $this->expectExceptionMessage(MessageValidatorException::INVALIDATED_EVENT_MESSAGE);
@@ -41,7 +41,7 @@ class MessageValidatorTest extends TestCase
     public function testValidateMissingSchema()
     {
         $json = JsonReader::read(__DIR__ . '/../jsons/messages/Users.afterSaveCommit.Create.json');
-        $message = (new MessageFactory)->createMessage($json);
+        $message = (new MessageFactory())->createMessage($json);
         $this->expectException(MessageValidatorException::class);
         $this->expectExceptionMessage(MessageValidatorException::MISSING_EVENT_SCHEMA);
         $this->assertTrue(MessageValidator::validate($message));

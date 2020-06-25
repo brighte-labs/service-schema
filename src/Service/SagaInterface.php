@@ -12,5 +12,4 @@ interface SagaInterface extends ServiceInterface
      * @return \ServiceSchema\Event\MessageInterface|bool
      */
     public function rollback(MessageInterface $message = null);
-
 }

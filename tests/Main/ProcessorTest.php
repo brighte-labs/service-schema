@@ -23,7 +23,11 @@ class ProcessorTest extends TestCase
     {
         parent::setUp();
         $this->testDir = dirname(dirname(__FILE__));
-        $this->processor = new Processor([$this->testDir . "/jsons/configs/events.json"], [$this->testDir . "/jsons/configs/services.json"], $this->testDir);
+        $this->processor = new Processor(
+            [$this->testDir . "/jsons/configs/events.json"],
+            [$this->testDir . "/jsons/configs/services.json"],
+            $this->testDir
+        );
     }
 
     /**
@@ -128,7 +132,7 @@ class ProcessorTest extends TestCase
     public function testRollbackService()
     {
         $json = JsonReader::read($this->testDir . "/jsons/messages/Users.afterSaveCommit.Create.json");
-        $message = (new MessageFactory)->createMessage($json);
+        $message = (new MessageFactory())->createMessage($json);
         $service = $this->createMock(SagaInterface::class);
         $service->expects($this->once())->method('rollback')->with($message)->willReturn(true);
         $service->expects($this->any())->method('getJsonSchema')->willReturn('/jsons/schemas/CreateContact.json');
@@ -139,7 +143,7 @@ class ProcessorTest extends TestCase
     public function testRollbackServiceInvalid()
     {
         $json = JsonReader::read($this->testDir . "/jsons/messages/Users.afterSaveCommit.Create.Failed.json");
-        $message = (new MessageFactory)->createMessage($json);
+        $message = (new MessageFactory())->createMessage($json);
         $service = $this->createMock(SagaInterface::class);
         $service->expects($this->never())->method('rollback')->with($message);
         $service->expects($this->any())->method('getJsonSchema')->willReturn('/jsons/schemas/CreateContact.json');

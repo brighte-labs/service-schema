@@ -32,10 +32,11 @@ class MessageValidator
         $validator->validate($jsonObject, $schema, Constraint::CHECK_MODE_APPLY_DEFAULTS);
 
         if (!$validator->isValid()) {
-            throw new MessageValidatorException(MessageValidatorException::INVALIDATED_EVENT_MESSAGE . json_encode($validator->getErrors()));
+            throw new MessageValidatorException(
+                MessageValidatorException::INVALIDATED_EVENT_MESSAGE . json_encode($validator->getErrors())
+            );
         }
 
         return $validator->isValid();
     }
-
 }

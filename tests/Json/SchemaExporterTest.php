@@ -30,10 +30,13 @@ class SchemaExporterTest extends TestCase
     {
         parent::setUp();
         $this->testDir = dirname(dirname(__FILE__));
-        $this->processor = new Processor([$this->testDir . "/jsons/configs/events.json"], [$this->testDir . "/jsons/configs/services.json"], $this->testDir);
+        $this->processor = new Processor(
+            [$this->testDir . "/jsons/configs/events.json"],
+            [$this->testDir . "/jsons/configs/services.json"],
+            $this->testDir
+        );
         $this->message = JsonReader::read($this->testDir . "/jsons/messages/Users.afterSaveCommit.Create.json");
         $this->schema = JsonReader::read($this->testDir . "/jsons/schemas/CreateContact.json");
-
     }
 
     /**
@@ -46,7 +49,10 @@ class SchemaExporterTest extends TestCase
         $this->schemaExporter = new SchemaExporter($this->processor);
 
         $result = $this->schemaExporter->export(schemaExporter::RETURN_JSON);
-        $this->assertContains('{"CreateContact":{"type":"object","properties":{"event":{"type":"string","minLength":0,"maxLength":256}', $result);
+        $this->assertContains(
+            '{"CreateContact":{"type":"object","properties":{"event":{"type":"string","minLength":0,"maxLength":256}',
+            $result
+        );
     }
 
     public function testExportArray()
