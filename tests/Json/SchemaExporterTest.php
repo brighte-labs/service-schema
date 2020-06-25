@@ -48,4 +48,33 @@ class SchemaExporterTest extends TestCase
         $result = $this->schemaExporter->export(schemaExporter::RETURN_JSON);
         $this->assertContains('{"CreateContact":{"type":"object","properties":{"event":{"type":"string","minLength":0,"maxLength":256}', $result);
     }
+
+    public function testExportArray()
+    {
+        $this->schemaExporter = new SchemaExporter($this->processor);
+
+        $result = $this->schemaExporter->export(schemaExporter::RETURN_ARRAY);
+        $expected = [
+            'CreateContact' => [
+                'type' => 'object',
+                'properties' => [
+                    'event' => [
+                        'type' => 'string',
+                        'minLength' => 0,
+                        'maxLength' => 256,
+                    ]
+                ]
+            ]
+        ];
+
+        $this->assertArraySubset($expected, $result);
+    }
+
+    public function testExportEventSchema()
+    {
+        $schemas = SchemaExporter::exportEventSchema(__DIR__ . '/../jsons/schemas/');
+        $expected = ['CreateContact', 'CreateTask', 'UpdateContact'];
+        $found = array_intersect($expected, array_keys($schemas));
+        $this->assertEquals($expected, $found);
+    }
 }

@@ -4,7 +4,7 @@ namespace ServiceSchema\Service;
 
 use ServiceSchema\Event\MessageInterface;
 
-interface SagaInterface
+interface SagaInterface extends ServiceInterface
 {
 
     /**

@@ -5,6 +5,7 @@ namespace ServiceSchema\Tests\Service;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\NullLogger;
 use ServiceSchema\Json\JsonReader;
+use ServiceSchema\Service\Exception\ServiceException;
 use ServiceSchema\Service\ServiceValidator;
 use ServiceSchema\Tests\Service\Samples\CreateContact;
 
@@ -46,5 +47,20 @@ class ServiceValidatorTest extends TestCase
         $this->serviceValidator->setSchemaDir($this->testDir);
         $schemaDir = $this->serviceValidator->getSchemaDir();
         $this->assertSame($schemaDir, $this->serviceValidator->getSchemaDir());
+    }
+
+    public function testValidateNullJson()
+    {
+        $this->expectException(ServiceException::class);
+        $this->expectExceptionMessage(ServiceException::MISSING_JSON_STRING);
+        $this->serviceValidator->validate();
+    }
+
+    public function testValidateNullService()
+    {
+        $this->expectException(ServiceException::class);
+        $this->expectExceptionMessage(ServiceException::MISSING_SERVICE_SCHEMA);
+        $json = json_decode('{}');
+        $this->serviceValidator->validate($json);
     }
 }
