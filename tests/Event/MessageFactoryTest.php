@@ -40,12 +40,12 @@ class MessageFactoryTest extends TestCase
     {
         $this->expectException(JsonException::class);
         $this->expectExceptionMessage(JsonException::MISSING_JSON_CONTENT);
-        (new MessageFactory)->createMessage('');
+        (new MessageFactory())->createMessage('');
     }
 
     public function testCreateEventInvalid()
     {
         $this->expectException(JsonException::class);
-        (new MessageFactory)->createMessage('invalid-json');
+        (new MessageFactory())->createMessage('invalid-json');
     }
 }

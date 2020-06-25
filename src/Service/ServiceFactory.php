@@ -40,10 +40,14 @@ class ServiceFactory
             $service = $this->container
             ? $this->getService($serviceClass)
             : (class_exists($serviceClass) ? new $serviceClass() : null);
-            if ($service === null)
+            if ($service === null) {
                 throw new ClassNotFoundException("not found", $serviceClass);
+            }
         } catch (\Exception $exception) {
-            $this->logger->error(__METHOD__ . ': ' . ServiceException::INVALID_SERVICE_CLASS, ['serviceName' => $serviceClass, 'exception' => $exception->getMessage()]);
+            $this->logger->error(__METHOD__ . ': ' . ServiceException::INVALID_SERVICE_CLASS, [
+                'serviceName' => $serviceClass,
+                'exception' => $exception->getMessage()
+            ]);
 
             return false;
         }

@@ -12,9 +12,9 @@ class ServiceRegister
     /** @var array $services */
     protected $services = [];
 
-    const INDEX_SERVICE = "service";
-    const INDEX_SCHEMA = "schema";
-    const INDEX_CALLBACKS = "callbacks";
+    public const INDEX_SERVICE = "service";
+    public const INDEX_SCHEMA = "schema";
+    public const INDEX_CALLBACKS = "callbacks";
 
     /**
      * ServiceRegister constructor.
@@ -40,7 +40,11 @@ class ServiceRegister
             $rows = JsonReader::decode(JsonReader::read($config), true);
             foreach ($rows as $row) {
                 if (isset($row[self::INDEX_SERVICE]) && isset($row[self::INDEX_SCHEMA])) {
-                    $this->registerService($row[self::INDEX_SERVICE], $row[self::INDEX_SCHEMA], isset($row[self::INDEX_CALLBACKS]) ? $row[self::INDEX_CALLBACKS] : null);
+                    $this->registerService(
+                        $row[self::INDEX_SERVICE],
+                        $row[self::INDEX_SCHEMA],
+                        isset($row[self::INDEX_CALLBACKS]) ? $row[self::INDEX_CALLBACKS] : null
+                    );
                 }
             }
         }

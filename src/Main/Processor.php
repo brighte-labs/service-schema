@@ -237,7 +237,13 @@ class Processor implements ProcessorInterface
         $json = JsonReader::decode($message->toJson());
         $validator = $this->serviceValidator->validate($json, $service);
         if (!$validator->isValid()) {
-            throw  new ServiceException(sprintf(ServiceException::INVALIDATED_JSON_STRING, $service->getJsonSchema(), json_encode($validator->getErrors())));
+            throw new ServiceException(
+                sprintf(
+                    ServiceException::INVALIDATED_JSON_STRING,
+                    $service->getJsonSchema(),
+                    json_encode($validator->getErrors())
+                )
+            );
         }
 
         if (isset($json->payload)) {
@@ -256,8 +262,12 @@ class Processor implements ProcessorInterface
      * @throws \ServiceSchema\Json\Exception\JsonException
      * @throws \ServiceSchema\Service\Exception\ServiceException
      */
-    public function runService(MessageInterface $message = null, ServiceInterface $service = null, array $callbacks = null, bool $return = false)
-    {
+    public function runService(
+        MessageInterface $message = null,
+        ServiceInterface $service = null,
+        array $callbacks = null,
+        bool $return = false
+    ) {
         $this->logger->debug(__METHOD__ . ': Start running service', [
             'messageId' => $message->getId(),
             'service' => $service->getName(),
@@ -266,7 +276,13 @@ class Processor implements ProcessorInterface
         $json = JsonReader::decode($message->toJson());
         $validator = $this->serviceValidator->validate($json, $service);
         if (!$validator->isValid()) {
-            throw  new ServiceException(sprintf(ServiceException::INVALIDATED_JSON_STRING, $service->getJsonSchema(), json_encode($validator->getErrors())));
+            throw new ServiceException(
+                sprintf(
+                    ServiceException::INVALIDATED_JSON_STRING,
+                    $service->getJsonSchema(),
+                    json_encode($validator->getErrors())
+                )
+            );
         }
 
         if (isset($json->payload)) {

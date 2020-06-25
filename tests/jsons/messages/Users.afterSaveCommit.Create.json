@@ -1,11 +1,11 @@
 {
+  "id": null,
   "event": "Users.afterSaveCommit.Create",
   "time": "20190726032212",
-  "status": "New",
   "payload": {
     "user": {
       "data": {
-        "name" : "Ken"
+        "name": "Ken"
       }
     },
     "account": {
@@ -13,5 +13,10 @@
         "name": "Brighte"
       }
     }
-  }
+  },
+  "source": null,
+  "description": null,
+  "status": "New",
+  "sagaId": null,
+  "attributes": null
 }

@@ -2,7 +2,6 @@
 
 namespace ServiceSchema\Config;
 
-
 use ServiceSchema\Json\JsonReader;
 
 class EventRegister
@@ -13,8 +12,8 @@ class EventRegister
     /** @var array $events */
     protected $events = [];
 
-    const INDEX_EVENT = "event";
-    const INDEX_SERVICES = "services";
+    public const INDEX_EVENT = "event";
+    public const INDEX_SERVICES = "services";
 
     /**
      * EventRegister constructor.

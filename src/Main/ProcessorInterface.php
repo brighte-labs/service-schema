@@ -33,7 +33,11 @@ interface ProcessorInterface
      * @param array|null $callbacks
      * @return mixed
      */
-    public function runService(MessageInterface $message = null, ServiceInterface $service = null, array $callbacks = null);
+    public function runService(
+        MessageInterface $message = null,
+        ServiceInterface $service = null,
+        array $callbacks = null
+    );
 
     /**
      * @param \ServiceSchema\Event\MessageInterface $event
