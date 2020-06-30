@@ -3,6 +3,8 @@
 namespace ServiceSchema\Main;
 
 use Psr\Container\ContainerInterface;
+use Psr\Log\LoggerInterface;
+use Psr\Log\NullLogger;
 use ServiceSchema\Config\EventRegister;
 use ServiceSchema\Config\ServiceRegister;
 use ServiceSchema\Event\Message;
@@ -34,26 +36,33 @@ class Processor implements ProcessorInterface
     /** @var \ServiceSchema\Service\ServiceValidator */
     protected $serviceValidator;
 
+    /** @var LoggerInterface */
+    protected $logger;
+
     /**
      * ServiceProvider constructor.
      *
      * @param array|null $eventConfigs
      * @param array|null $serviceConfigs
      * @param string|null $schemaDir
+     * @param ContainerInterface|null $container
+     * @param LoggerInterface|null $logger
      * @throws \ServiceSchema\Json\Exception\JsonException
      */
     public function __construct(
         array $eventConfigs = null,
         array $serviceConfigs = null,
         string $schemaDir = null,
-        ContainerInterface $container = null
+        ContainerInterface $container = null,
+        LoggerInterface $logger = null
     ) {
         $this->eventRegister = new EventRegister($eventConfigs);
         $this->serviceRegister = new ServiceRegister($serviceConfigs);
-        $this->serviceFactory = new ServiceFactory($container);
         $this->messageFactory = new MessageFactory();
         $this->serviceValidator = new ServiceValidator(null, $schemaDir);
         $this->loadConfigs();
+        $this->logger = $logger ?? new NullLogger();
+        $this->serviceFactory = new ServiceFactory($container, $this->logger);
     }
 
     /**
