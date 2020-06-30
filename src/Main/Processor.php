@@ -58,11 +58,11 @@ class Processor implements ProcessorInterface
     ) {
         $this->eventRegister = new EventRegister($eventConfigs);
         $this->serviceRegister = new ServiceRegister($serviceConfigs);
-        $this->serviceFactory = new ServiceFactory($container);
         $this->messageFactory = new MessageFactory();
         $this->serviceValidator = new ServiceValidator(null, $schemaDir);
         $this->loadConfigs();
         $this->logger = $logger ?? new NullLogger();
+        $this->serviceFactory = new ServiceFactory($container, $this->logger);
     }
 
     /**
