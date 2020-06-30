@@ -11,9 +11,9 @@ class SchemaExporter
     /** @var \ServiceSchema\Main\Processor */
     protected $processor;
 
-    const SCHEMA_EXTENSION = 'json';
-    const RETURN_JSON = 1;
-    const RETURN_ARRAY = 2;
+    public const SCHEMA_EXTENSION = 'json';
+    public const RETURN_JSON = 1;
+    public const RETURN_ARRAY = 2;
 
     /**
      * SchemaReader constructor.
@@ -35,7 +35,8 @@ class SchemaExporter
         $files = [];
         $services = $this->processor->getServiceRegister()->getServices();
         foreach ($services as $service) {
-            $files[$service[ServiceRegister::INDEX_SCHEMA]] = $this->processor->getServiceValidator()->getSchemaDir() . $service[ServiceRegister::INDEX_SCHEMA];
+            $files[$service[ServiceRegister::INDEX_SCHEMA]] = $this->processor->getServiceValidator()->getSchemaDir() .
+                $service[ServiceRegister::INDEX_SCHEMA];
         }
 
         $schemas = [];
@@ -64,7 +65,10 @@ class SchemaExporter
         $files = array_diff(scandir($dir), array('.', '..'));
         $schemas = [];
         foreach ($files as $file) {
-            $schemas[basename($file, '.' . self::SCHEMA_EXTENSION)] = JsonReader::decode(JsonReader::read($dir . '/' . $file), true);
+            $schemas[basename($file, '.' . self::SCHEMA_EXTENSION)] = JsonReader::decode(
+                JsonReader::read($dir . '/' . $file),
+                true
+            );
         }
 
         return $schemas;

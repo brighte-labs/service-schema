@@ -62,4 +62,15 @@ class ServiceRegisterTest extends TestCase
         $this->assertTrue(isset($service["Service.Name"]));
         $this->assertEquals("SomeServiceSchema", $service["Service.Name"]['schema']);
     }
+
+    public function testGetSet()
+    {
+        $this->serviceRegister->setConfigs(['a', 'b']);
+        $config = $this->serviceRegister->getConfigs();
+        $this->assertCount(2, $config);
+
+        $this->serviceRegister->setServices(['a', 'b']);
+        $services = $this->serviceRegister->getServices();
+        $this->assertCount(2, $services);
+    }
 }

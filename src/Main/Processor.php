@@ -86,11 +86,16 @@ class Processor implements ProcessorInterface
     public function process($message = null, array $filteredEvents = null, bool $return = false)
     {
         $message = $this->createMessage($message);
+
         if (!empty($filteredEvents) && !in_array($message->getEvent(), $filteredEvents)) {
             throw new ProcessorException(ProcessorException::FILTERED_EVENT_ONLY . json_encode($filteredEvents));
         }
 
         $registeredEvents = $this->eventRegister->retrieveEvent($message->getEvent());
+        $this->logger->debug(__METHOD__ . ': Registered events.', [
+            'registeredEvents' => $registeredEvents
+        ]);
+
         if (empty($registeredEvents)) {
             throw new ProcessorException(ProcessorException::NO_REGISTER_EVENTS . $message->getEvent());
         }
@@ -102,6 +107,11 @@ class Processor implements ProcessorInterface
 
             foreach ($services as $serviceName) {
                 $registerService = $this->serviceRegister->retrieveService($serviceName);
+                $this->logger->debug(__METHOD__ . ': Registered service.', [
+                    'registeredServices' => $registerService,
+                    'serviceName' => $serviceName
+                ]);
+
                 if (empty($registerService)) {
                     continue;
                 }
@@ -118,6 +128,11 @@ class Processor implements ProcessorInterface
                 }
 
                 $this->runService($message, $service, $callbacks);
+                $this->logger->debug(__METHOD__ . ': End running service', [
+                    'messageId' => $message->getId(),
+                    'service' => $service->getName(),
+
+                ]);
             }
         }
 
@@ -134,7 +149,12 @@ class Processor implements ProcessorInterface
     public function rollback($message = null)
     {
         $message = $this->createMessage($message);
+
         $registeredEvents = $this->eventRegister->retrieveEvent($message->getEvent());
+        $this->logger->debug(__METHOD__ . ': Registered events.', [
+            'registeredEvents' => $registeredEvents
+        ]);
+
         if (empty($registeredEvents)) {
             throw new ProcessorException(ProcessorException::NO_REGISTER_EVENTS . $message->getEvent());
         }
@@ -146,18 +166,29 @@ class Processor implements ProcessorInterface
 
             foreach ($services as $serviceName) {
                 $registerService = $this->serviceRegister->retrieveService($serviceName);
+                $this->logger->debug(__METHOD__ . ': Registered service.', [
+                    'registeredServices' => $registerService,
+                    'serviceName' => $serviceName
+                ]);
+
                 if (empty($registerService)) {
                     continue;
                 }
 
                 $jsonSchema = $registerService[$serviceName][ServiceRegister::INDEX_SCHEMA];
                 $service = $this->serviceFactory->createService($serviceName, $jsonSchema);
+
                 if (empty($service)) {
                     continue;
                 }
 
                 if ($service instanceof SagaInterface) {
                     $this->rollbackService($message, $service);
+                    $this->logger->debug(__METHOD__ . ': End rolling back service', [
+                        'messageId' => $message->getId(),
+                        'service' => $service->getName(),
+
+                    ]);
                 }
             }
         }
@@ -182,6 +213,11 @@ class Processor implements ProcessorInterface
             throw new ProcessorException(ProcessorException::FAILED_TO_CREATE_MESSAGE . $json);
         }
 
+        $this->logger->debug(__METHOD__ . ': Message Created', [
+            'messageId' => $message->getId(),
+            'event' => $message->getEvent()
+        ]);
+
         return $message;
     }
 
@@ -194,10 +230,20 @@ class Processor implements ProcessorInterface
      */
     public function rollbackService(MessageInterface $message = null, SagaInterface $service = null)
     {
+        $this->logger->debug(__METHOD__ . ': Start rolling back service', [
+            'messageId' => $message->getId(),
+        ]);
+
         $json = JsonReader::decode($message->toJson());
         $validator = $this->serviceValidator->validate($json, $service);
         if (!$validator->isValid()) {
-            throw  new ServiceException(sprintf(ServiceException::INVALIDATED_JSON_STRING, $service->getJsonSchema(), json_encode($validator->getErrors())));
+            throw new ServiceException(
+                sprintf(
+                    ServiceException::INVALIDATED_JSON_STRING,
+                    $service->getJsonSchema(),
+                    json_encode($validator->getErrors())
+                )
+            );
         }
 
         if (isset($json->payload)) {
@@ -216,12 +262,27 @@ class Processor implements ProcessorInterface
      * @throws \ServiceSchema\Json\Exception\JsonException
      * @throws \ServiceSchema\Service\Exception\ServiceException
      */
-    public function runService(MessageInterface $message = null, ServiceInterface $service = null, array $callbacks = null, bool $return = false)
-    {
+    public function runService(
+        MessageInterface $message = null,
+        ServiceInterface $service = null,
+        array $callbacks = null,
+        bool $return = false
+    ) {
+        $this->logger->debug(__METHOD__ . ': Start running service', [
+            'messageId' => $message->getId(),
+            'service' => $service->getName(),
+
+        ]);
         $json = JsonReader::decode($message->toJson());
         $validator = $this->serviceValidator->validate($json, $service);
         if (!$validator->isValid()) {
-            throw  new ServiceException(sprintf(ServiceException::INVALIDATED_JSON_STRING, $service->getJsonSchema(), json_encode($validator->getErrors())));
+            throw new ServiceException(
+                sprintf(
+                    ServiceException::INVALIDATED_JSON_STRING,
+                    $service->getJsonSchema(),
+                    json_encode($validator->getErrors())
+                )
+            );
         }
 
         if (isset($json->payload)) {

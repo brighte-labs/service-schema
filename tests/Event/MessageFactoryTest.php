@@ -5,6 +5,7 @@ namespace ServiceSchema\Tests\Event;
 use PHPUnit\Framework\TestCase;
 use ServiceSchema\Event\Message;
 use ServiceSchema\Event\MessageFactory;
+use ServiceSchema\Json\Exception\JsonException;
 
 class MessageFactoryTest extends TestCase
 {
@@ -33,5 +34,18 @@ class MessageFactoryTest extends TestCase
         $this->assertEquals("Test.Event.Name", $message->getEvent());
         $this->assertEquals("SomeTimeString", $message->getTime());
         $this->assertEquals((object)["name" => "Ken"], $message->getPayload());
+    }
+
+    public function testCreateEventEmpty()
+    {
+        $this->expectException(JsonException::class);
+        $this->expectExceptionMessage(JsonException::MISSING_JSON_CONTENT);
+        (new MessageFactory())->createMessage('');
+    }
+
+    public function testCreateEventInvalid()
+    {
+        $this->expectException(JsonException::class);
+        (new MessageFactory())->createMessage('invalid-json');
     }
 }

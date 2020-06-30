@@ -1,8 +1,8 @@
 <?php
 
-
 namespace ServiceSchema\Service;
 
+use Psr\Log\LoggerInterface;
 
 class Service
 {
@@ -48,5 +48,4 @@ class Service
 
         return $this;
     }
-
 }

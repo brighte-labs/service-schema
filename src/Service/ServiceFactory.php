@@ -5,6 +5,8 @@ namespace ServiceSchema\Service;
 use Prophecy\Exception\Doubler\ClassNotFoundException;
 use Psr\Container\ContainerInterface;
 use Psr\Container\NotFoundExceptionInterface;
+use Psr\Log\LoggerInterface;
+use Psr\Log\NullLogger;
 use ServiceSchema\Service\Exception\ServiceException;
 
 class ServiceFactory
@@ -13,9 +15,13 @@ class ServiceFactory
     /** @var ContainerInterface $container */
     protected $container;
 
-    public function __construct(ContainerInterface $container = null)
+    /** @var LoggerInterface */
+    protected $logger;
+
+    public function __construct(ContainerInterface $container = null, LoggerInterface $logger = null)
     {
         $this->container = $container;
+        $this->logger = $logger ?? new NullLogger();
     }
     /**
      * @param string|null $serviceClass
@@ -25,16 +31,28 @@ class ServiceFactory
      */
     public function createService(string $serviceClass = null, string $schema = null)
     {
+        $this->logger->debug(__METHOD__ . ': Start creating service class', [
+            'serviceClass' => $serviceClass,
+            'schema' => $schema
+        ]);
+
         try {
-            $service = $this->container 
+            $service = $this->container
             ? $this->getService($serviceClass)
             : (class_exists($serviceClass) ? new $serviceClass() : null);
-            if ($service === null)
-                throw new ClassNotFoundException("not found", $service);
+            if ($service === null) {
+                throw new ClassNotFoundException("not found", $serviceClass);
+            }
         } catch (\Exception $exception) {
-            throw new ServiceException(ServiceException::INVALID_SERVICE_CLASS . $serviceClass);
+            $this->logger->error(__METHOD__ . ': ' . ServiceException::INVALID_SERVICE_CLASS, [
+                'serviceName' => $serviceClass,
+                'exception' => $exception->getMessage()
+            ]);
+
+            return false;
         }
 
+        $this->logger->debug(__METHOD__ . 'Service Created', ['serviceName' => $serviceClass]);
         if ($service instanceof ServiceInterface) {
             $service->setName($serviceClass);
             $service->setJsonSchema($schema);
@@ -50,7 +68,7 @@ class ServiceFactory
         try {
             return $this->container->get($serviceClass);
         } catch (NotFoundExceptionInterface $e) {
-            return new $serviceClass($this->container);
+            return new $serviceClass();
         }
     }
 
