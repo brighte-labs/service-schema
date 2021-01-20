@@ -4,6 +4,9 @@ php:
   - 7.3
   - 7.4
 install: composer install
+
+before_script:
+  - export XDEBUG_MODE=coverage
 script:
   - vendor/bin/phpunit --coverage-clover=coverage.xml
 after_script:
