@@ -34,6 +34,7 @@ class Message implements MessageInterface
     /** @var array|null */
     protected $attributes;
 
+    /** @var string */
     protected $type;
 
     /**
@@ -43,7 +44,7 @@ class Message implements MessageInterface
      */
     public function __construct(array $data = null)
     {
-        $this->type = isset($data['type']) ? $data['type'] : 'event';;
+        $this->type = isset($data['type']) ? $data['type'] : 'event';
         $this->id = isset($data['id']) ? $data['id'] : null;
         $this->event = isset($data['event']) ? $data['event'] : null;
         $this->time = isset($data['time']) ? $data['time'] : date("Y-m-d H:i:s");
