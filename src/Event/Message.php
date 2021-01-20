@@ -34,6 +34,8 @@ class Message implements MessageInterface
     /** @var array|null */
     protected $attributes;
 
+    protected $type;
+
     /**
      * Message constructor.
      *
@@ -41,6 +43,7 @@ class Message implements MessageInterface
      */
     public function __construct(array $data = null)
     {
+        $this->type = isset($data['type']) ? $data['type'] : 'event';;
         $this->id = isset($data['id']) ? $data['id'] : null;
         $this->event = isset($data['event']) ? $data['event'] : null;
         $this->time = isset($data['time']) ? $data['time'] : date("Y-m-d H:i:s");
@@ -59,7 +62,7 @@ class Message implements MessageInterface
     public function toJson()
     {
         return JsonReader::encode([
-            '__jobType' => 'event',
+            '__jobType' => $this->type,
             "id" => $this->id,
             "event" => $this->event,
             "time" => $this->time,
@@ -256,6 +259,13 @@ class Message implements MessageInterface
         return $this->attributes[$key];
     }
 
+    /**
+     * @param mixed|string $type
+     */
+    public function setType($type)
+    {
+        $this->type = $type;
+    }
     /**
      * @param string $key
      * @param string|array|null $value
