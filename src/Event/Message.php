@@ -267,6 +267,15 @@ class Message implements MessageInterface
     {
         $this->type = $type;
     }
+
+    /**
+     * @return string
+     */
+    public function getType(): string
+    {
+        return $this->type;
+    }
+
     /**
      * @param string $key
      * @param string|array|null $value
