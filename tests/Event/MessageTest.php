@@ -71,8 +71,6 @@ class MessageTest extends TestCase
         $this->assertSame($entity, 'source');
 
         $event->setSagaId('sagaId');
-        $event->setType('type1');
-        $this->assertEquals('type1', $event->getType());
         $entity = $event->getSagaId();
         $this->assertSame($entity, 'sagaId');
 
@@ -83,5 +81,12 @@ class MessageTest extends TestCase
         $event->setAttributes(['attr', 'attr2']);
         $entity = $event->getAttributes();
         $this->assertSame($entity, ['attr', 'attr2']);
+    }
+
+    public function testSetType()
+    {
+        $event = new Message();
+        $event->setType('type1');
+        $this->assertEquals('type1', $event->getType());
     }
 }
