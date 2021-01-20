@@ -59,6 +59,7 @@ class Message implements MessageInterface
     public function toJson()
     {
         return JsonReader::encode([
+            '__jobType' => 'event',
             "id" => $this->id,
             "event" => $this->event,
             "time" => $this->time,
