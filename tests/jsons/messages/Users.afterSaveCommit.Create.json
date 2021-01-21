@@ -1,4 +1,5 @@
 {
+  "__jobType": "event",
   "id": null,
   "event": "Users.afterSaveCommit.Create",
   "time": "20190726032212",

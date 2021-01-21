@@ -82,4 +82,11 @@ class MessageTest extends TestCase
         $entity = $event->getAttributes();
         $this->assertSame($entity, ['attr', 'attr2']);
     }
+
+    public function testSetType()
+    {
+        $event = new Message();
+        $event->setType('type1');
+        $this->assertEquals('type1', $event->getType());
+    }
 }
