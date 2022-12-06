@@ -15,7 +15,7 @@ class ServiceRegisterTest extends TestCase
     /**
      * @throws \ServiceSchema\Json\Exception\JsonException
      */
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $this->testDir = dirname(dirname(__FILE__));

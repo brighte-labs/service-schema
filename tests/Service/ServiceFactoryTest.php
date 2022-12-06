@@ -21,7 +21,7 @@ class ServiceFactoryTest extends TestCase
     /** @var MockObject */
     protected $logger;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $this->testDir = dirname(dirname(__FILE__));

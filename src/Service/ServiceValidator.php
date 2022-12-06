@@ -9,7 +9,6 @@ use ServiceSchema\Service\Exception\ServiceException;
 
 class ServiceValidator
 {
-
     /** @var \JsonSchema\Validator */
     protected $validator;
 

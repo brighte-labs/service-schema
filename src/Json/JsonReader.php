@@ -6,7 +6,6 @@ use ServiceSchema\Json\Exception\JsonException;
 
 class JsonReader implements JsonReaderInterface
 {
-
     /**
      * @param string|null $file
      * @return string

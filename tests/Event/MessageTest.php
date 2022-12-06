@@ -7,10 +7,9 @@ use ServiceSchema\Event\Message;
 
 class MessageTest extends TestCase
 {
-
     protected $testDir;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $this->testDir = dirname(dirname(__FILE__));

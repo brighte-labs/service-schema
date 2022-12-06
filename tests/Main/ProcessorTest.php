@@ -19,7 +19,7 @@ class ProcessorTest extends TestCase
     /** @var Processor */
     protected $processor;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $this->testDir = dirname(dirname(__FILE__));

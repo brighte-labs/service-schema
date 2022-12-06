@@ -7,7 +7,6 @@ use ServiceSchema\Main\Processor;
 
 class SchemaExporter
 {
-
     /** @var \ServiceSchema\Main\Processor */
     protected $processor;
 

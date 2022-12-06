@@ -15,7 +15,7 @@ class ServiceValidatorTest extends TestCase
     /** @var ServiceValidator */
     protected $serviceValidator;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $this->testDir = dirname(dirname(__FILE__));

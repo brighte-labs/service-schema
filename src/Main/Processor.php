@@ -20,7 +20,6 @@ use ServiceSchema\Service\ServiceValidator;
 
 class Processor implements ProcessorInterface
 {
-
     /** @var \ServiceSchema\Config\EventRegister */
     protected $eventRegister;
 

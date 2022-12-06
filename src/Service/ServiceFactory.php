@@ -11,7 +11,6 @@ use ServiceSchema\Service\Exception\ServiceException;
 
 class ServiceFactory
 {
-
     /** @var ContainerInterface $container */
     protected $container;
 

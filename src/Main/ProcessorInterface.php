@@ -7,7 +7,6 @@ use ServiceSchema\Service\ServiceInterface;
 
 interface ProcessorInterface
 {
-
     /**
      * @param string|\ServiceSchema\Event\Message $json
      * @param bool $return return first service result

@@ -7,7 +7,6 @@ use ServiceSchema\Json\JsonReader;
 
 class MessageFactory
 {
-
     /**
      * @param string|null $json
      * @return false|\ServiceSchema\Event\Message

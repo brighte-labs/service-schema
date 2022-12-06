@@ -6,7 +6,6 @@ use ServiceSchema\Event\MessageInterface;
 
 interface SagaInterface extends ServiceInterface
 {
-
     /**
      * @param \ServiceSchema\Event\MessageInterface $message
      * @return \ServiceSchema\Event\MessageInterface|bool

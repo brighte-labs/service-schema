@@ -26,7 +26,7 @@ class SchemaExporterTest extends TestCase
     protected $schemaExporter;
 
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $this->testDir = dirname(dirname(__FILE__));
@@ -49,7 +49,7 @@ class SchemaExporterTest extends TestCase
         $this->schemaExporter = new SchemaExporter($this->processor);
 
         $result = $this->schemaExporter->export(schemaExporter::RETURN_JSON);
-        $this->assertContains(
+        $this->assertStringContainsString(
             '{"CreateContact":{"type":"object","properties":{"event":{"type":"string","minLength":0,"maxLength":256}',
             $result
         );
@@ -61,19 +61,12 @@ class SchemaExporterTest extends TestCase
 
         $result = $this->schemaExporter->export(schemaExporter::RETURN_ARRAY);
         $expected = [
-            'CreateContact' => [
-                'type' => 'object',
-                'properties' => [
-                    'event' => [
-                        'type' => 'string',
-                        'minLength' => 0,
-                        'maxLength' => 256,
-                    ]
-                ]
-            ]
+            'type' => 'string',
+            'minLength' => 0,
+            'maxLength' => 256,
         ];
 
-        $this->assertArraySubset($expected, $result);
+        $this->assertEquals($expected, $result['CreateContact']['properties']['event']);
     }
 
     public function testExportEventSchema()

@@ -4,7 +4,6 @@ namespace ServiceSchema\Event;
 
 interface MessageInterface
 {
-
     /**
      * @return false|string
      */

@@ -6,7 +6,6 @@ use ServiceSchema\Json\JsonReader;
 
 class Message implements MessageInterface
 {
-
     /** @var string */
     protected $id;
 
